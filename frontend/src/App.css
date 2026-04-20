@@ -1,0 +1,349 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+  --card-bg: rgba(255, 255, 255, 0.85); 
+  --green: #10b981;
+  --green-glow: 0 5px 20px rgba(16, 185, 129, 0.2);
+  --red: #ef4444;
+  --red-glow: 0 5px 20px rgba(239, 68, 68, 0.2);
+  --text-main: #0f172a; 
+  --text-muted: #64748b;
+  --accent-blue: #3b82f6; 
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+  color: #0f172a;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.dashboard {
+  padding: 2.5rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.header h1 {
+  font-size: 3.8rem;
+  background: -webkit-linear-gradient(45deg, #0284c7, #3b82f6, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+  letter-spacing: -1px;
+}
+
+.header p {
+  color: #64748b;
+  font-size: 1.3rem;
+  font-weight: 400;
+}
+
+.grid-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.top-section {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr;
+  gap: 2rem;
+}
+
+.bottom-section {
+  width: 100%;
+}
+
+/* Cameras */
+.cameras-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.camera-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 1);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(14, 165, 233, 0.08); 
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid rgba(241, 245, 249, 1);
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: 1.15rem;
+}
+
+.cam-image {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: contain;
+  background-color: #f1f5f9; 
+  display: block;
+}
+
+.signal-badge {
+  padding: 0.4rem 1rem;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.signal-green {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.signal-red {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.ambulance-badge {
+  background: linear-gradient(90deg, #ef4444, #b91c1c);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  animation: pulse 1s infinite alternate;
+  margin-left: 10px;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+}
+
+@keyframes pulse {
+  from { opacity: 0.8; transform: scale(1); }
+  to { opacity: 1; transform: scale(1.05); }
+}
+
+/* Control Panel */
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: 100%;
+}
+
+.engine-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 1);
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(14, 165, 233, 0.08);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.engine-card h2 {
+  font-size: 2.8rem;
+  margin: 1.5rem 0;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.engine-card h2.green { color: #10b981; }
+.engine-card h2.red { color: #ef4444; }
+
+.timer {
+  font-size: 6rem;
+  font-weight: 700;
+  line-height: 1;
+  margin: 1.5rem 0;
+  background: -webkit-linear-gradient(45deg, #0f172a, #334155);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.metric-label {
+  font-size: 1.1rem;
+  color: #3b82f6;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+
+.status-msg {
+  color: #0369a1; 
+  margin-top: 2rem;
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+/* Minimap Natively Built in CSS - Dynamic Update */
+.minimap-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 1);
+  border-radius: 24px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 15px 35px rgba(14, 165, 233, 0.08);
+}
+
+.minimap-container {
+  width: 100%;
+  height: 600px;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 1.5rem;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.05);
+}
+
+.road-vert {
+  position: absolute;
+  top: 0; left: 40%; right: 40%; bottom: 0;
+  background: #cbd5e1;
+}
+.road-horiz {
+  position: absolute;
+  top: 40%; left: 0; right: 0; bottom: 40%;
+  background: #cbd5e1;
+}
+.intersection {
+  position: absolute;
+  top: 40%; left: 40%; right: 40%; bottom: 40%;
+  background: #94a3b8; 
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.intersection-timer {
+  font-size: 4rem;
+  font-weight: 700;
+  color: white;
+  z-index: 10;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.lane-divider-vert {
+  position: absolute;
+  top: 0; bottom: 0; left: 50%;
+  border-left: 4px dashed #fcd34d;
+}
+.lane-divider-horiz {
+  position: absolute;
+  left: 0; right: 0; top: 50%;
+  border-top: 4px dashed #fcd34d;
+}
+
+/* Detailed Traffic Lights */
+.traffic-light-post {
+  position: absolute;
+  width: 26px; height: 60px;
+  background: #1e293b;
+  border-radius: 8px;
+  border: 2px solid #94a3b8;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  z-index: 15;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  padding: 4px 0;
+}
+
+.bulb {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.5);
+  transition: opacity 0.3s ease;
+}
+
+.bulb-red { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+.bulb-yellow { background: #facc15; box-shadow: 0 0 10px #facc15; }
+.bulb-green { background: #10b981; box-shadow: 0 0 10px #10b981; }
+
+/* Positioning the posts perfectly at intersection corners */
+.traffic-light-post.lt1 { top: 38%; left: 38%; transform: translate(-100%, -100%); }
+.traffic-light-post.lt2 { top: 38%; right: 38%; transform: translate(100%, -100%); }
+.traffic-light-post.lt3 { bottom: 38%; right: 38%; transform: translate(100%, 100%); }
+.traffic-light-post.lt4 { bottom: 38%; left: 38%; transform: translate(-100%, 100%); }
+
+/* Moving Cars System */
+.map-car {
+  position: absolute;
+  background: #0ea5e9; 
+  border-radius: 8px;
+  border: 3px solid white;
+  z-index: 8;
+  box-shadow: 0 4px 6px rgba(14, 165, 233, 0.3);
+}
+
+.map-ambulance {
+  background: #ef4444; 
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
+  animation: pulse 0.5s infinite alternate;
+}
+
+/* CSS Animations for Active Driving Lanes */
+.drive-north-south { animation: driveNS 1.8s linear forwards; }
+@keyframes driveNS {
+  100% { top: 110%; opacity: 0; }
+}
+
+.drive-east-west { animation: driveEW 1.8s linear forwards; }
+@keyframes driveEW {
+  100% { right: 110%; opacity: 0; }
+}
+
+.drive-south-north { animation: driveSN 1.8s linear forwards; }
+@keyframes driveSN {
+  100% { bottom: 110%; opacity: 0; }
+}
+
+.drive-west-east { animation: driveWE 1.8s linear forwards; }
+@keyframes driveWE {
+  100% { left: 110%; opacity: 0; }
+}
+
+/* CSS Animations for Queuing up intelligently to RED lights */
+.arrive-north-south { animation: arriveNS 0.8s ease-out forwards; }
+@keyframes arriveNS { 0% { top: -10%; opacity: 0; } }
+
+.arrive-east-west { animation: arriveEW 0.8s ease-out forwards; }
+@keyframes arriveEW { 0% { right: -10%; opacity: 0; } }
+
+.arrive-south-north { animation: arriveSN 0.8s ease-out forwards; }
+@keyframes arriveSN { 0% { bottom: -10%; opacity: 0; } }
+
+.arrive-west-east { animation: arriveWE 0.8s ease-out forwards; }
+@keyframes arriveWE { 0% { left: -10%; opacity: 0; } }

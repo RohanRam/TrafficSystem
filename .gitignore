@@ -1,0 +1,14 @@
+# Environments
+venv/
+env/
+__pycache__/
+
+# Mac OS
+.DS_Store
+
+# Frontend
+**/node_modules/
+**/dist/
+
+# Env vars
+.env
