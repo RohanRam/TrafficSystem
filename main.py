@@ -59,7 +59,7 @@ def camera_worker(cam_id, video_path):
         video_frames[cam_id] = buffer.tobytes()
         return
 
-    frame_skip = 2 # Boosted: Process 1 inference every 2 frames for a blazing fast ~15 FPS natively!
+    frame_skip = 3 # Boosted: Process AI every 3rd frame, but stream UI smoothly at 30fps
     frame_count = 0
     
     while True:
@@ -71,26 +71,24 @@ def camera_worker(cam_id, video_path):
             continue
             
         frame_count += 1
+        roi = get_full_roi(frame.shape)
         
-        # Only process every Nth frame with heavy YOLO AI
-        if frame_count % frame_skip == 0:
-            roi = get_full_roi(frame.shape)
+        run_ai = (frame_count % frame_skip == 0)
+        
+        # Tracker handles YOLO Thread-Safe locking internally now
+        ann_img, count, is_em = tracker.process_image(frame, roi, cam_id=cam_id, run_inference=run_ai)
             
-            # CRITICAL: Serialize AI PyTorch calls because YOLO is not thread-safe!
-            with inference_lock:
-                ann_img, count, is_em = tracker.process_image(frame, roi)
+        # ALWAYS update Real-time state updates to our backend
+        global_state["counts"][cam_id] = count
+        global_state["emergencies"][cam_id] = is_em
             
-            # Real-time state updates to our backend
-            global_state["counts"][cam_id] = count
-            global_state["emergencies"][cam_id] = is_em
-            
-            # Encode frame to JPEG so the MJPEG server can stream it to React
-            ret, buffer = cv2.imencode('.jpg', ann_img)
-            if ret:
-                video_frames[cam_id] = buffer.tobytes()
+        # ALWAYS Encode frame to JPEG so the MJPEG server streams a butter-smooth video
+        ret, buffer = cv2.imencode('.jpg', ann_img)
+        if ret:
+            video_frames[cam_id] = buffer.tobytes()
                 
-        # Very small sleep prevents infinite spinning from instantly crashing the CPU
-        time.sleep(0.01)
+        # 0.033 gives us approx 30 FPS video playback 
+        time.sleep(0.033)
 
 def logic_loop():
     while True:

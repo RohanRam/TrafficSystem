@@ -3,7 +3,7 @@ import numpy as np
 from ultralytics import YOLOWorld
 
 class TrafficTracker:
-    def __init__(self, model_path='yolov8s-worldv2.pt'):
+    def __init__(self, model_path='yolov8s-worldv2.pt', num_cameras=4):
         print(f"Loading YOLO-World Zero-Shot Model ({model_path})...")
         # Load the zero-shot model
         self.model = YOLOWorld(model_path)
@@ -14,14 +14,20 @@ class TrafficTracker:
         
         # Quick reference to ID
         self.ambulance_cls_id = self.target_class_names.index("emergency ambulance vehicle")
+        self.last_results = [None] * num_cameras
+        self.inference_lock = __import__('threading').Lock()
         
-    def process_image(self, image, roi_polygon):
+    def process_image(self, image, roi_polygon, cam_id=0, run_inference=True):
         """
         Runs YOLO-World detection on a single image.
         Returns the annotated image, the vehicle count, and a boolean if an ambulance is seen.
         """
-        # We don't filter classes during predict anymore, the model only knows our 5 custom classes!
-        results = self.model.predict(image, verbose=False)
+        if run_inference or self.last_results[cam_id] is None:
+            # Added higher conf and iou in predict, and agnostic_nms to prevent multiple detections of same vehicle
+            with self.inference_lock:
+                self.last_results[cam_id] = self.model.predict(image, verbose=False, conf=0.3, iou=0.4, agnostic_nms=True)
+            
+        results = self.last_results[cam_id]
         
         annotated_image = image.copy()
         vehicle_count = 0
