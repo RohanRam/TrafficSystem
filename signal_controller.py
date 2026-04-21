@@ -6,6 +6,9 @@ class SignalController:
         self.current_green_lane = 1 # 1, 2, 3, or 4
         self.timer = self.min_green_time
         
+        self.in_emergency = False
+        self.saved_state = None
+        
     def update(self, delta_time, counts, emergencies):
         self.timer -= delta_time
         status_msg = "Traffic monitoring active."
@@ -18,12 +21,29 @@ class SignalController:
                 break
                 
         if emergency_lane:
-            if self.current_green_lane != emergency_lane:
-                self.current_green_lane = emergency_lane
-                self.timer = self.max_green_time
+            if not self.in_emergency:
+                # Save previous state before overriding
+                self.in_emergency = True
+                self.saved_state = {
+                    'lane': self.current_green_lane,
+                    'timer': max(self.timer, 2.0) # Ensure it has at least 2s when returning
+                }
+                # Grant a full green cycle timer for the ambulance
+                self.timer = float(self.max_green_time)
+            
+            self.current_green_lane = emergency_lane
             if self.timer < 0:
-                 self.timer = 0
+                self.timer = 0
             return emergency_lane, f"🚨 EMERGENCY OVERRIDE - LANE {emergency_lane} FORCE GREEN"
+            
+        elif self.in_emergency:
+            # Emergency just cleared, restore old state!
+            self.in_emergency = False
+            if self.saved_state:
+                self.current_green_lane = self.saved_state['lane']
+                self.timer = self.saved_state['timer']
+                self.saved_state = None
+            status_msg = f"Ambulance passed! Resuming normal operation on Lane {self.current_green_lane}."
             
         # --- Normal Comparative Logic ---
         

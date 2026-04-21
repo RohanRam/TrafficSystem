@@ -19,11 +19,14 @@
 }
 
 body {
+  
   font-family: 'Outfit', sans-serif;
   background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
   color: #0f172a;
   min-height: 100vh;
   margin: 0;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .dashboard {
@@ -42,8 +45,10 @@ body {
   background: -webkit-linear-gradient(45deg, #0284c7, #3b82f6, #6366f1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 0.5rem;
+  margin-bottom: 2px;
   letter-spacing: -1px;
+  line-height: 1.2;
+  padding: 0.1em 0;
 }
 
 .header p {
@@ -60,7 +65,7 @@ body {
 
 .top-section {
   display: grid;
-  grid-template-columns: 2.5fr 1fr;
+  grid-template-columns: minmax(0, 4.5fr) minmax(0, 1fr);
   gap: 2rem;
 }
 
@@ -157,7 +162,7 @@ body {
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 1);
   border-radius: 24px;
-  padding: 3rem 2rem;
+  padding: 2rem 1.5rem;
   text-align: center;
   box-shadow: 0 15px 35px rgba(14, 165, 233, 0.08);
   height: 100%;
@@ -167,8 +172,8 @@ body {
 }
 
 .engine-card h2 {
-  font-size: 2.8rem;
-  margin: 1.5rem 0;
+  font-size: 2rem;
+  margin: 1rem 0;
   font-weight: 700;
   letter-spacing: -0.5px;
 }
@@ -177,13 +182,16 @@ body {
 .engine-card h2.red { color: #ef4444; }
 
 .timer {
-  font-size: 6rem;
+  font-size: 4rem;
   font-weight: 700;
   line-height: 1;
-  margin: 1.5rem 0;
+  margin: 1rem 0;
   background: -webkit-linear-gradient(45deg, #0f172a, #334155);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+  min-width: 120px;
 }
 
 .metric-label {
@@ -301,17 +309,13 @@ body {
 /* Moving Cars System */
 .map-car {
   position: absolute;
-  background: #0ea5e9; 
-  border-radius: 8px;
-  border: 3px solid white;
   z-index: 8;
-  box-shadow: 0 4px 6px rgba(14, 165, 233, 0.3);
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
 }
 
 .map-ambulance {
-  background: #ef4444; 
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
-  animation: pulse 0.5s infinite alternate;
+  z-index: 15;
+  filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.8));
 }
 
 /* CSS Animations for Active Driving Lanes */

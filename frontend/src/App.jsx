@@ -1,8 +1,53 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
+
+const TopDownVehicle = ({ isAmbulance }) => {
+  if (isAmbulance) {
+    return (
+      <svg viewBox="0 0 16 30" style={{ width: '100%', height: '100%', display: 'block' }}>
+        <rect width="16" height="30" rx="3" fill="#ffffff" stroke="#ef4444" strokeWidth="1" />
+        <rect x="2" y="5" width="12" height="6" rx="1" fill="#94a3b8" />
+        <rect x="2" y="20" width="12" height="6" rx="1" fill="#94a3b8" />
+        <rect x="6" y="11" width="4" height="8" fill="#ef4444" />
+        <rect x="4" y="13" width="8" height="4" fill="#ef4444" />
+        <circle cx="4" cy="2" r="1.5" fill="#ef4444">
+           <animate attributeName="opacity" values="1;0;1" dur="0.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="12" cy="2" r="1.5" fill="#3b82f6">
+           <animate attributeName="opacity" values="0;1;0" dur="0.5s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    );
+  }
+  return (
+    <svg viewBox="0 0 16 30" style={{ width: '100%', height: '100%', display: 'block' }}>
+      <rect width="16" height="30" rx="3" fill="#0ea5e9" />
+      <rect x="2" y="6" width="12" height="5" rx="1" fill="#1e293b" />
+      <rect x="2" y="19" width="12" height="6" rx="1" fill="#1e293b" />
+    </svg>
+  );
+};
 
 function App() {
   const [state, setState] = useState(null);
+  const [transitioningLanes, setTransitioningLanes] = useState([]);
+  const prevLaneRef = useRef(null);
+
+  useEffect(() => {
+    if (!state) return;
+    if (prevLaneRef.current && prevLaneRef.current !== state.active_lane) {
+      const oldLane = prevLaneRef.current;
+      const newLane = state.active_lane;
+      setTransitioningLanes([oldLane, newLane]);
+      
+      const timerId = setTimeout(() => {
+        setTransitioningLanes([]);
+      }, 500); // 0.5 seconds yellow transition
+      
+      return () => clearTimeout(timerId);
+    }
+    prevLaneRef.current = state.active_lane;
+  }, [state?.active_lane]);
 
   useEffect(() => {
     const fetchState = async () => {
@@ -21,7 +66,9 @@ function App() {
   }, []);
 
   if (!state) {
-    return <div style={{ color: '#0f172a', textAlign: 'center', marginTop: '100px' }}><h1>Loading UrbanFlow Video Engine...</h1><p>Ensure FastAPI is running on port 8000.</p></div>
+    return <div style={{ color: '#0f172a', textAlign: 'center', marginTop: '100px' }}><h1>Loading UrbanFlow Video Engine...</h1>
+    {/* <p>Ensure FastAPI is running on port 8000.</p> */}
+    </div>
   }
 
   const { counts, emergencies, active_lane, timer, message } = state;
@@ -64,15 +111,17 @@ function App() {
        
        // Continuous Queue Positioning
        const offset = 35 - (i * 8); 
+       
+       style = { width: '16px', height: '30px' };
 
        if (laneIndex === 0) {
-           style = { left: '44%', top: `${offset}%`, width: '14px', height: '24px' };
+           style.left = '44%'; style.top = `${offset}%`; style.transform = 'rotate(180deg)';
        } else if (laneIndex === 1) {
-           style = { top: '44%', right: `${offset}%`, width: '24px', height: '14px' };
+           style.top = '44%'; style.right = `${offset}%`; style.transform = 'rotate(-90deg)';
        } else if (laneIndex === 2) {
-           style = { left: '54%', bottom: `${offset}%`, width: '14px', height: '24px' };
+           style.left = '54%'; style.bottom = `${offset}%`; style.transform = 'rotate(0deg)';
        } else {
-           style = { top: '54%', left: `${offset}%`, width: '24px', height: '14px' };
+           style.top = '54%'; style.left = `${offset}%`; style.transform = 'rotate(90deg)';
        }
 
        if (isGreen) {
@@ -94,7 +143,11 @@ function App() {
            }
        }
 
-       cars.push(<div key={`car-${laneIndex}-${i}`} className={className} style={style}></div>);
+       cars.push(
+         <div key={`car-${laneIndex}-${i}`} className={className} style={style}>
+           <TopDownVehicle isAmbulance={isAmbulance} />
+         </div>
+       );
     }
     return cars;
   }
@@ -102,12 +155,12 @@ function App() {
   return (
     <div className="dashboard">
       <header className="header">
-        <h1>UrbanFlow Core</h1>
+        <h1>UrbanFlow</h1>
         <p>Intelligent 4-Way Traffic Orchestration System</p>
       </header>
       
       <div className="grid-container">
-        
+     
         {/* Top Split Level */}
         <div className="top-section">
           <div className="cameras-grid">
@@ -120,8 +173,8 @@ function App() {
                   <div className="card-header">
                     <span className="card-title">
                       {laneLabels[i]} 
-                      <span style={{marginLeft: '12px', color: '#64748b', fontSize: '0.9rem'}}>Vol: {counts[i]}</span>
-                      {emergencies[i] && <span className="ambulance-badge">🚨 AMBULANCE</span>}
+                      <span style={{marginLeft: '12px', color: '#64748b', fontSize: '0.9rem'}}>Vol: {counts[i]}<br></br></span>
+                      {emergencies[i] && <span className="ambulance-badge">AMBULANCE</span>}
                     </span>
                     
                     <span className={`signal-badge ${isGreen ? 'signal-green' : 'signal-red'}`}>
@@ -141,7 +194,7 @@ function App() {
               <h2 className={active_lane ? "green" : "red"}>
                 LANE {active_lane} IS GREEN
               </h2>
-              <div className="timer">{timer.toFixed(1)}s</div>
+              <div className="timer">{Math.floor(timer)}s</div>
               <div className="metric-label">Remaining</div>
               <div className="status-msg">{message}</div>
             </div>
@@ -172,12 +225,18 @@ function App() {
                 
                 {/* Detailed Traffic Light Posts */}
                 {[1, 2, 3, 4].map((lane) => {
-                   const isGrn = active_lane === lane;
+                   const isLaneActive = active_lane === lane;
+                   const isTransitioning = transitioningLanes.includes(lane);
+                   
+                   const isYellow = isTransitioning;
+                   const isGreen = isLaneActive && !isTransitioning;
+                   const isRed = !isLaneActive && !isTransitioning;
+
                    return (
                      <div key={`light-${lane}`} className={`traffic-light-post lt${lane}`}>
-                        <div className="bulb bulb-red" style={{ opacity: isGrn ? 0.15 : 1 }}></div>
-                        <div className="bulb bulb-yellow" style={{ opacity: 0.15 }}></div>
-                        <div className="bulb bulb-green" style={{ opacity: isGrn ? 1 : 0.15 }}></div>
+                        <div className="bulb bulb-red" style={{ opacity: isRed ? 1 : 0.15 }}></div>
+                        <div className="bulb bulb-yellow" style={{ opacity: isYellow ? 1 : 0.15 }}></div>
+                        <div className="bulb bulb-green" style={{ opacity: isGreen ? 1 : 0.15 }}></div>
                      </div>
                    );
                 })}
