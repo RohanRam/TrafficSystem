@@ -92,7 +92,7 @@ Simulation (SUMO / Prototype)
 ## ⚙️ Installation
 
 ```bash
-git clone https://github.com/your-username/UrbanFlow.git
+git clone https://github.com/RohanRam/UrbanFlow.git
 cd UrbanFlow
 
 pip install -r requirements.txt
