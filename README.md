@@ -7,6 +7,14 @@ The system uses computer vision and machine learning techniques to analyze traff
 
 ---
 
+## 📸 Demo Output
+
+### Traffic Detection
+![Traffic Detection](ss1.png)
+
+### Signal Control
+![Signal Control](ss2.png)
+
 ## 🎯 Problem Statement
 Traditional traffic systems operate on fixed timers, which:
 - Do not adapt to real-time traffic conditions  
