@@ -154,8 +154,6 @@ python main.py
 - [Devnath P](https://github.com/devnathdivya6-hash) 
 - [Aadish K](https://github.com/Aadishk) 
 - [Addwin Antony Stephen](https://github.com/Addwin2004)
-- 
-- Addwin Stephen 
 
 ---
 
