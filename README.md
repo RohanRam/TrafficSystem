@@ -167,4 +167,4 @@ python main.py
 ---
 
 ## 📜 License
-This project is for academic and research purposes.
+This project is for academics and research purposes.
