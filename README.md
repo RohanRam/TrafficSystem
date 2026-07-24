@@ -1,7 +1,7 @@
 # 🚦 UrbanFlow: Intelligent Traffic Management System
 
 ## 📌 Overview
-UrbanFlow is an intelligent traffic management system designed to optimize traffic signal timings based on real-time vehicle density and prioritize emergency vehicles like ambulances.
+UrbanFlow is an intelligent traffic management system designed to optimize traffic signal timing's based on real-time vehicle density and prioritize emergency vehicles like ambulances.
 
 The system uses computer vision and machine learning techniques to analyze traffic conditions and dynamically control signals, reducing congestion and improving response times for emergency services.
 
@@ -167,4 +167,10 @@ python main.py
 ---
 
 ## 📜 License
-This project is for academics and research purposes.
+This project is for academic and research purposes.
+
+
+
+
+
+
